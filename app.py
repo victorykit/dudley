@@ -5,7 +5,8 @@ from flask import Flask, request, make_response
 app = Flask(__name__)
 #app.config['DEBUG'] = True
 
-def text_response(output):
+@app.route("/")
+def index(output):
     return "Hello, world!"
 
 if __name__ == "__main__":
