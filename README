@@ -1,0 +1,8 @@
+install instructions:
+
+    git clone $DUDLEY_URL
+    heroku create
+    heroku addons:add heroku-postgresql:dev
+    heroku pg:promote HEROKU_POSTGRESQL_TEAL # or whatever color [@@automatable?]
+    heroku pg:psql < schema.sql 
+    git push heroku master
