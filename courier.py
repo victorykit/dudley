@@ -1,11 +1,12 @@
 """
 courier: an intelligent subprocessor
 """
-import subprocess
+import sys, subprocess
 
 class Courier:
-    def __init__(self):
+    def __init__(self, storer=None):
         self.cwd = None
+        if storer: self._store = storer
     
     def cd(self, cwd):
         self.note('cd ' + cwd)
@@ -19,10 +20,10 @@ class Courier:
         return p.returncode
     
     def _store(self, x):
-        print x
+        sys.stdout.write(x)
     
     def note(self, line):
-        self._store('$ ' + line)
+        self._store('$ ' + line + '\n')
     
     def output(self, data):
         self._store(data)

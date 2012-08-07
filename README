@@ -4,5 +4,38 @@ install instructions:
     heroku create
     heroku addons:add heroku-postgresql:dev
     heroku pg:promote HEROKU_POSTGRESQL_TEAL # or whatever color [@@automatable?]
-    heroku pg:psql < schema.sql 
+    heroku pg:psql < schema.sql
+    
+    heroku config:add GIT_URL=[path to your git repo]
     git push heroku master
+
+next up to do:
+
+ - check status codes to make sure build succeeded
+ - web interface to watch builds
+ - watchdb: spawn builders
+ 
+ Key management
+   Create a new heroku account
+   Generate a new key for it
+   Put the privkey in the dudley config
+   Put the password in the Dudley config (see if you can get a token)
+   Grant the new account access to the build server
+   Then build has to log in to heroku
+ 
+ 
+ Htmlize
+   Courier callback takes escape codes
+   Convert escape coded to HTML before printing to browser
+    Anyone we need to persuade that we're a tty?
+ 
+ Rebuild
+      Marks job uncompleted
+      But make sure we don't push to production
+        Don't force on production
+
+ 
+ - have courier update the db even if there's no command output:
+ http://stackoverflow.com/questions/375427/non-blocking-read-on-a-subprocess-pipe-in-python
+ - poller thread
+ 
