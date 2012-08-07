@@ -1,4 +1,4 @@
 Flask
 gunicorn
-web.py
+git+https://github.com/webpy/webpy.git#egg=web
 psycopg2

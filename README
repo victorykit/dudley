@@ -11,10 +11,6 @@ install instructions:
 
 next up to do:
 
- - check status codes to make sure build succeeded
- - web interface to watch builds
- - watchdb: spawn builders
- 
  Key management
    Create a new heroku account
    Generate a new key for it
@@ -23,6 +19,8 @@ next up to do:
    Grant the new account access to the build server
    Then build has to log in to heroku
  
+ - real build instructions
+ - check status codes to make sure build succeeded
  
  Htmlize
    Courier callback takes escape codes

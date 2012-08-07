@@ -14,7 +14,8 @@ class Courier:
         
     def run(self, *args):
         self.note(' '.join(args))
-        p = subprocess.Popen(args, cwd=self.cwd, stdout=subprocess.PIPE)
+        p = subprocess.Popen(args, cwd=self.cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.output(p.stderr.read())
         self.output(p.stdout.read())
         p.wait()
         return p.returncode

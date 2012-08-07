@@ -1,0 +1,9 @@
+<h1>job {{job.commit_hash}}</h1>
+
+{% for build in builds %}
+
+<h2>build {{build.id}}</h2>
+
+<pre>{{build.log}}</pre>
+
+{% endfor %}
