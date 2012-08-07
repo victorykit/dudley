@@ -6,10 +6,13 @@ REPO_STORAGE = '/tmp/dudley_repo'
 NOW = web.sqlliteral('now()')
 
 env = web.storage(os.environ)
+buildqueue = simplethread.Queue()
 
 def watchdb(db):
-    for job in db.select('jobs', where="builder is null and done='f'"):
-        simplethread.spawn(lambda: start_build(db, job))
+    while 1:
+        buildqueue.get(timeout=60)
+        for job in db.select('jobs', where="builder is null and done='f'"):
+            simplethread.spawn(lambda: start_build(db, job))
 
 def get_buildserver(db, build_id):
     buildservers = db.select('buildservers', where="building is null", limit=1).list()

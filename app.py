@@ -23,7 +23,8 @@ def hook():
     #d = json.loads(request.data)
     d = request.json
     if d['ref'] != 'refs/heads/master': return "skipping\n"
-    db.insert('jobs', commit_hash=d['after'])
+    job_id = db.insert('jobs', commit_hash=d['after'])
+    builder.buildqueue.put(job_id)
     return "queued\n"
 
 if __name__ == "__main__":
