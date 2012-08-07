@@ -30,8 +30,6 @@
 
  - builder runs a real build process
    - check status codes to make sure build succeeded
- - have courier update the db even if there's no command output:
- http://stackoverflow.com/questions/375427/non-blocking-read-on-a-subprocess-pipe-in-python
  - install pusher
  - HTMLize
    - courier bolds command lines with escape codes
