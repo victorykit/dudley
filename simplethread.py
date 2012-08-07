@@ -11,5 +11,3 @@ def spawn(func, daemon=True):
 class Queue(qmodule.Queue):
     def get(self, timeout=0):
         return qmodule.Queue.get(self, bool(timeout), timeout)
-    push = put
-    pop = get
