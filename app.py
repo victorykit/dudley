@@ -3,7 +3,7 @@ from flask import Flask, request, make_response
 
 
 app = Flask(__name__)
-#app.config['DEBUG'] = True
+app.config['DEBUG'] = bool(os.environ.get('DEBUG'))
 
 @app.route("/")
 def index():
