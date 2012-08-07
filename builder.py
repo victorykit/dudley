@@ -53,6 +53,9 @@ def start_build(db, job):
 
 def do_build(commit_hash, sh, buildserver):
     if not os.path.exists(REPO_STORAGE):
+        try: os.mkdir('/app/.ssh')
+        except OSError: pass # directory already exists
+        file('/app/.ssh/id_rsa', 'w').write(env.SSH_PRIVKEY)
         sh.run('git', 'clone', env.GIT_URL, REPO_STORAGE)
     sh.cd(REPO_STORAGE)
     sh.run('git', 'remote', 'add', buildserver.short_name, buildserver.git_url)
