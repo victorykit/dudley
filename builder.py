@@ -10,7 +10,8 @@ buildqueue = simplethread.Queue()
 
 def watchdb(db):
     while 1:
-        buildqueue.get(timeout=60)
+        try: buildqueue.get(timeout=60)
+        except simplethread.Empty: pass
         for job in db.select('jobs', where="builder is null and done='f'"):
             simplethread.spawn(lambda: start_build(db, job))
 
