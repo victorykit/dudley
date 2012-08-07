@@ -9,7 +9,7 @@ app = Flask(__name__)
 def index():
     return "Hello, world!"
 
-@app.route("/hook")
+@app.route("/hook", methods=["POST"])
 def hook():
     d = json.loads(request.data)
     return "taking %s from %s to %s" % (
