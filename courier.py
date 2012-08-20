@@ -15,14 +15,14 @@ class Courier:
         self.note('cd ' + cwd)
         self.cwd = cwd
         
-    def run(self, bg=False, *args):
+    def run(self, *args, **kwargs):
         self.note(' '.join(args))
         p = subprocess.Popen(args, cwd=self.cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         simplethread.spawn(lambda: self._gobble(p.stderr))
         simplethread.spawn(lambda: self._gobble(p.stdout))
         simplethread.spawn(lambda: self._deathgobble(p.wait))
         
-        if bg:
+        if kwargs.get('bg'):
             simplethread.spawn(lambda: self._outputdata())
             return
         else:
