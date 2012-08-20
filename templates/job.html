@@ -4,6 +4,17 @@
 
 <h2>build {{build.id}}</h2>
 
-<pre>{{build.log}}</pre>
+<pre id="build_{{build.id}}">{{build.log}}</pre>
 
 {% endfor %}
+
+<script src="http://js.pusher.com/1.12/pusher.min.js"></script>
+<script type="text/javascript">
+var pusher = new Pusher('{{pusher_key}}'); // uses your API KEY
+function updateFromChannel(data) {
+document.getElementById('build_' + data.build_id).innerHTML += data.text;
+}
+{% for build in builds %}
+pusher.subscribe('build_{{build.id}}').bind('update', updateFromChannel);
+{% endfor %}
+</script>

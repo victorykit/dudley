@@ -1,6 +1,6 @@
 import os, urllib, json
 from flask import Flask, request, make_response, render_template
-import web
+import web, pusher
 import simplethread, builder
 
 app = Flask(__name__)
@@ -15,7 +15,8 @@ def index():
 @app.route('/jobs/<int:job_id>')
 def show_job(job_id):
     job = db.select('jobs', where='id = $job_id', vars=locals())[0]
-    builds = db.select('builds', where='job_id=$job_id', order='id asc', vars=locals())
+    builds = db.select('builds', where='job_id=$job_id', order='id asc', vars=locals()).list()
+    pusher_key = pusher.url2options(os.environ['PUSHER_URL'])['key']
     return render_template("job.html", **locals())
 
 @app.route("/hook", methods=["POST"])

@@ -9,6 +9,7 @@
     heroku addons:add heroku-postgresql:dev
     heroku pg:promote HEROKU_POSTGRESQL_TEAL # or whatever color [@@automatable?]
     heroku pg:psql < schema.sql
+    heroku addons:add pusher:sandbox
     
     heroku config:add GIT_URL=[path to your git repo]
 

@@ -1,10 +1,10 @@
 import os, time
-import web
+import web, pusher
 import courier, simplethread
 
 REPO_STORAGE = '/tmp/dudley_repo'
 NOW = web.sqlliteral('now()')
-
+pushcloud = pusher.pusher_from_url()
 env = web.storage(os.environ)
 buildqueue = simplethread.Queue()
 
@@ -33,8 +33,8 @@ def start_build(db, job):
         return False
     
     def update_build_log(text=''):
-        build_id # pulls from parent function
         db.query("UPDATE builds SET log = log || $text, updated_at = now() WHERE id=$build_id", vars=locals())
+        pushcloud['build_' + str(build_id)].trigger('update', {'text': text, 'build_id': build_id})
     
     sh = courier.Courier(update_build_log)
     
