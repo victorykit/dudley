@@ -36,7 +36,7 @@ class Courier:
         sys.stdout.write(x)
     
     def note(self, line):
-        self._store('$ ' + line + '\n')
+        self._store('\033[1m$ ' + line + '\033[0m\n')
     
     def output(self, data):
         self._store(data)

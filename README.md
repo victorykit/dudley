@@ -31,11 +31,8 @@
 
  - builder runs a real build process
    - check status codes to make sure build succeeded
- - install pusher
- - HTMLize
-   - courier bolds command lines with escape codes
-   - Convert escape coded to HTML before printing to browser
-   - Anyone we need to persuade that we're a tty?
+   - HTMLize
+     - Convert escape coded to HTML before printing to browser
  - Rebuild
    - Marks job uncompleted
    - But make sure we don't push to production

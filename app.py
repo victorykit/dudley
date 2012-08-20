@@ -1,6 +1,6 @@
 import os, urllib, json
 from flask import Flask, request, make_response, render_template
-import web, pusher
+import web, pusher, jinja2
 import simplethread, builder
 
 app = Flask(__name__)
@@ -18,6 +18,11 @@ def show_job(job_id):
     builds = db.select('builds', where='job_id=$job_id', order='id asc', vars=locals()).list()
     pusher_key = pusher.url2options(os.environ['PUSHER_URL'])['key']
     return render_template("job.html", **locals())
+
+@app.template_filter('unconsole')
+def unconsole_filter(s):
+    jm = jinja2.Markup
+    return jm.escape(s).replace('\033[1m', jm('<b>')).replace('\033[0m', jm('</b>'))
 
 @app.route("/hook", methods=["POST"])
 def hook():
