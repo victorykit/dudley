@@ -43,7 +43,7 @@ def start_build(db, job):
         update_build_log("Couldn't find a free buildserver. You might try adding some more.\n")
         update_build_log("Sleeping until we find one...\n")
         while not buildserver:
-            time.sleep(60)
+            time.sleep(1)
             update_build_log()
             buildserver = get_buildserver(db, build_id)
     
