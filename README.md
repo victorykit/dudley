@@ -33,9 +33,19 @@
    - check status codes to make sure build succeeded
    - HTMLize
      - Convert escape coded to HTML before printing to browser
+ - cancel builds
  - Rebuild
    - Marks job uncompleted
    - But make sure we don't push to production
      - Don't `push -f` on production
-
- 
+ - cleanup script to run by scheduler
+   - pushes web to run watchdb
+ - have watchdb look for dead jobs
+   - select * from jobs where active = 't' and last_update > now() - interval '1 minute'
+   - mark them as dead
+   - spawn a new builder thread
+ - build a new buildserver if none available?
+ - improve design
+ - easy install instructions
+ - optimize build speed
+ - figure out what to do with branches

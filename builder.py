@@ -62,7 +62,11 @@ def do_build(commit_hash, sh, buildserver):
     sh.cd(REPO_STORAGE)
     sh.run('git', 'remote', 'add', buildserver.short_name, buildserver.git_url)
     sh.run('git', 'pull')
-    sh.run('git', 'push', '-f', buildserver.short_name, commit_hash + ':master')
+    sh.run('bundle', 'install')
+    sh.run('foreman', 'start', '-f', 'Procfile.dev', bg=True)
+    assert sh.run('rake') == 0
+    sh.run('git', 'push', buildserver.short_name, commit_hash + ':master')
+    # @@ mark success
 
 if __name__ == "__main__":
     import sys

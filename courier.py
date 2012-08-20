@@ -15,13 +15,21 @@ class Courier:
         self.note('cd ' + cwd)
         self.cwd = cwd
         
-    def run(self, *args):
+    def run(self, bg=False, *args):
         self.note(' '.join(args))
         p = subprocess.Popen(args, cwd=self.cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         simplethread.spawn(lambda: self._gobble(p.stderr))
         simplethread.spawn(lambda: self._gobble(p.stdout))
         simplethread.spawn(lambda: self._deathgobble(p.wait))
         
+        if bg:
+            simplethread.spawn(lambda: self._outputdata())
+            return
+        else:
+            self._outputdata()
+            return p.returncode
+    
+    def _outputdata(self):
         while 1:
             try:
                 data = self.dataq.get(timeout=5)
@@ -30,8 +38,7 @@ class Courier:
             if data is TERMINATOR: break
             self.output(data)
         
-        return p.returncode
-    
+        
     def _store(self, x):
         sys.stdout.write(x)
     
