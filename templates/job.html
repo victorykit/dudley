@@ -12,7 +12,7 @@
 <script type="text/javascript">
 var pusher = new Pusher('{{pusher_key}}'); // uses your API KEY
 function updateFromChannel(data) {
-document.getElementById('build_' + data.build_id).innerHTML += data.text;
+document.getElementById('build_' + data.build_id).innerHTML += data.text.replace('\033[1m', '<b>').replace('\033[0m', '</b>');
 }
 {% for build in builds %}
 pusher.subscribe('build_{{build.id}}').bind('update', updateFromChannel);
