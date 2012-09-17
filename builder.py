@@ -61,7 +61,7 @@ def do_build(commit_hash, sh, buildserver):
         sh.run('git', 'clone', env.GIT_URL, REPO_STORAGE)
     sh.cd(REPO_STORAGE)
     sh.run('git', 'remote', 'add', buildserver.short_name, buildserver.git_url)
-    sh.run('git', 'pull')
+    sh.run('git', 'pull', 'origin', 'master')
     sh.run('git', 'checkout', commit_hash)
     sh.run('git', 'push', buildserver.short_name, commit_hash + ':master')
     # @@ mark success
