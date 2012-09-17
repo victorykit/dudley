@@ -29,6 +29,7 @@
 
 ## todo
 
+ - bold doesn't work when pushed via pusher
  - builder runs a real build process
    - check status codes to make sure build succeeded
    - HTMLize

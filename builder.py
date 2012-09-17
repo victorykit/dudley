@@ -47,7 +47,7 @@ def start_build(db, job):
             update_build_log()
             buildserver = get_buildserver(db, build_id)
     
-    do_build(job.commit_hash, sh, buildserver)
+    do_build(job.commit_hash, sh, buildserver) #@@wrap in try
     db.update('builds', where="id=$build_id", done=True, vars=locals())
     db.update('jobs', where="id=$job.id", done=True, vars=locals())
     db.update('buildservers', where='id=$buildserver.id', building=None, vars=locals())
@@ -62,9 +62,7 @@ def do_build(commit_hash, sh, buildserver):
     sh.cd(REPO_STORAGE)
     sh.run('git', 'remote', 'add', buildserver.short_name, buildserver.git_url)
     sh.run('git', 'pull')
-    sh.run('bundle', 'install')
-    sh.run('foreman', 'start', '-f', 'Procfile.dev', bg=True)
-    assert sh.run('rake') == 0
+    sh.run('git', 'checkout', commit_hash)
     sh.run('git', 'push', buildserver.short_name, commit_hash + ':master')
     # @@ mark success
 

@@ -25,11 +25,19 @@ def unconsole_filter(s):
     return jm.escape(s).replace('\033[1m', jm('<b>')).replace('\033[0m', jm('</b>'))
 
 @app.route("/hook", methods=["POST"])
-def hook():
+def github_hook():
     #d = json.loads(request.data)
     d = request.json
     if d['ref'] != 'refs/heads/master': return "skipping\n"
     job_id = db.insert('jobs', commit_hash=d['after'])
+    builder.buildqueue.put(job_id)
+    return "queued\n"
+
+@app.route('/semaphore_hook', methods=["POST"])
+def semaphore_hook():
+    d = request.json
+    if d['branch_name'] != 'master': return "skipping\n"
+    job_id = db.insert('jobs', commit_hash=d['commit']['id'])
     builder.buildqueue.put(job_id)
     return "queued\n"
 
