@@ -4,7 +4,8 @@ CREATE TABLE jobs (
   id serial primary key,
   commit_hash text,
   builder text,
-  done boolean default 'f'
+  done boolean default 'f',
+  success boolean
 );
 
 CREATE TABLE builds (
@@ -12,7 +13,8 @@ CREATE TABLE builds (
   job_id int references jobs,
   log text default '',
   updated_at timestamp,
-  done boolean default 'f'
+  done boolean default 'f',
+  success boolean
 );
 
 CREATE TABLE buildservers (

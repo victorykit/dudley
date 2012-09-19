@@ -47,9 +47,12 @@ def start_build(db, job):
             update_build_log()
             buildserver = get_buildserver(db, build_id)
     
-    do_build(job.commit_hash, sh, buildserver) #@@wrap in try
-    db.update('builds', where="id=$build_id", done=True, vars=locals())
-    db.update('jobs', where="id=$job.id", done=True, vars=locals())
+    try:
+        result = do_build(job.commit_hash, sh, buildserver)
+    except:
+        result = False
+    db.update('builds', where="id=$build_id", done=True, success=result, vars=locals())
+    db.update('jobs', where="id=$job.id", done=True, success=result, vars=locals())
     db.update('buildservers', where='id=$buildserver.id', building=None, vars=locals())
 
 def do_build(commit_hash, sh, buildserver):
@@ -60,11 +63,13 @@ def do_build(commit_hash, sh, buildserver):
         file('/app/.ssh/id_rsa', 'w').write(env.SSH_PRIVKEY)
         sh.run('git', 'clone', env.GIT_URL, REPO_STORAGE)
     sh.cd(REPO_STORAGE)
-    sh.run('git', 'remote', 'add', buildserver.short_name, buildserver.git_url)
-    sh.run('git', 'pull', 'origin', 'master')
-    sh.run('git', 'checkout', commit_hash)
-    sh.run('git', 'push', buildserver.short_name, commit_hash + ':master')
-    # @@ mark success
+    result = not ( # 0 is success, so we need to reverse
+    sh.run('git', 'remote', 'add', buildserver.short_name, buildserver.git_url) or
+    sh.run('git', 'pull', 'origin', 'master') or
+    sh.run('git', 'checkout', commit_hash) or
+    sh.run('git', 'push', buildserver.short_name, commit_hash + ':master'))
+    
+    return result
 
 if __name__ == "__main__":
     import sys

@@ -31,8 +31,6 @@
 
  - builder runs a real build process
    - check status codes to make sure build succeeded
-   - HTMLize
-     - Convert escape coded to HTML before printing to browser
  - cancel builds
  - Rebuild
    - Marks job uncompleted
@@ -49,3 +47,5 @@
  - easy install instructions
  - optimize build speed
  - figure out what to do with branches
+ - better ui integration with semaphore
+ - better integration with commitron
