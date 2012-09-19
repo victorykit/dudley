@@ -5,6 +5,7 @@ CREATE TABLE jobs (
   commit_hash text,
   builder text,
   done boolean default 'f',
+  created_at timestamp default now,
   success boolean
 );
 

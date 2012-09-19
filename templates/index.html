@@ -1,6 +1,11 @@
 <h1>Most recent pushes...</h1>
 
 {% for job in jobs %}
-{% set color = {True: '#afa', False: '#faa'}[job.success] %}
-<p style="padding: 1em; background-color: {{color}}"><strong><a href="/jobs/{{job.id}}">{{job.commit_hash}}</a></strong></p>
+{% set color = {True: '#afa', False: '#faa', None: '#ddd'}[job.success] %}
+<div style="padding: 1em; margin: .5em; background-color: {{color}}">
+    <div style="float: right">{{job.created_at|timesince}}</div>
+    <a href="/jobs/{{job.id}}">{{job.commit_hash}}</a>
+</div>
 {% endfor %}
+
+Powered by Dudley.
