@@ -37,7 +37,7 @@ def github_hook():
 def semaphore_hook():
     d = json.loads(request.form.keys()[0])
     if d['branch_name'] != 'master': return "skipping\n"
-    job_id = db.insert('jobs', commit_hash=d['commit']['id'])
+    job_id = db.insert('jobs', commit_hash=d['commit']['id'], message=d['commit']['message'], author=d['commit']['author_name'])
     builder.buildqueue.put(job_id)
     return "queued\n"
 

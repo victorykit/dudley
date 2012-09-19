@@ -6,6 +6,8 @@ CREATE TABLE jobs (
   builder text,
   done boolean default 'f',
   created_at timestamp default now,
+  message text,
+  author text,
   success boolean
 );
 

@@ -3,8 +3,8 @@
 {% for job in jobs %}
 {% set color = {True: '#afa', False: '#faa', None: '#ddd'}[job.success] %}
 <div style="padding: 1em; margin: .5em; background-color: {{color}}">
-    <div style="float: right">{{job.created_at|timesince}}</div>
-    <a href="/jobs/{{job.id}}">{{job.commit_hash}}</a>
+    <div style="float: right">{{job.created_at|timesince}}<br />{{job.author}}</div>
+    <a href="/jobs/{{job.id}}">{{job.commit_hash}}</a><br />{{job.message}}
 </div>
 {% endfor %}
 
