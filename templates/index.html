@@ -10,8 +10,10 @@
 </style>
 <h1>Deploys</h1>
 
+{%if ci_link%} <p><a href="{{ci_link}}">View build status...</a></p> {% endif %}
+
 {% for job in jobs %}
-{% set color = {True: '#afa', False: '#faa', None: '#ddd'}[job.success] %}
+{% set color = {True: '#dfd', False: '#fdd', None: '#ddd'}[job.success] %}
 <a href="/jobs/{{job.id}}" class="box" style="background-color: {{color}};">
     <div style="float: right">{{job.author or ''}}<br />{{job.created_at|timesince}}</div>
     <b>{{job.message or ''}}</b><br />

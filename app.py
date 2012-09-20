@@ -10,7 +10,7 @@ db = web.database()
 @app.route("/")
 def index():
     jobs = db.select('jobs', order='id desc')
-    return render_template("index.html", jobs=jobs)
+    return render_template("index.html", jobs=jobs, ci_link=os.environ.get('CI_LINK'))
 
 @app.route('/jobs/<int:job_id>')
 def show_job(job_id):
