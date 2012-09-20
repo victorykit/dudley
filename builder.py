@@ -63,13 +63,23 @@ def do_build(commit_hash, sh, buildserver):
         file('/app/.ssh/id_rsa', 'w').write(env.SSH_PRIVKEY)
         sh.run('git', 'clone', env.GIT_URL, REPO_STORAGE)
     sh.cd(REPO_STORAGE)
-    result = not ( # 0 is success, so we need to reverse
-    sh.run('git', 'remote', 'add', buildserver.short_name, buildserver.git_url) or
-    sh.run('git', 'pull', 'origin', 'master') or
-    sh.run('git', 'checkout', commit_hash) or
-    sh.run('git', 'push', buildserver.short_name, commit_hash + ':master'))
     
-    return result
+    def sensiblepush(count=10):
+        errcode = sh.run('git', 'push', buildserver.short_name, commit_hash + ':master')
+        if errcode and 'error fetching custom buildpack' in sh.lastoutput and count:
+            sh.note('# Error fetching custom buildpack, retrying.')
+            return sensiblepush(count=count-1)
+        else:
+            return errcode
+    
+    errcode = ( # 0 is success, so we use `or`
+      sh.run('git', 'remote', 'add', buildserver.short_name, buildserver.git_url) or
+      sh.run('git', 'pull', 'origin', 'master') or
+      sh.run('git', 'checkout', commit_hash) or
+      sensiblepush()
+    )
+        
+    return not errcode
 
 if __name__ == "__main__":
     import sys

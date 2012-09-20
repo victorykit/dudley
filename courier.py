@@ -1,7 +1,7 @@
 """
 courier: an intelligent subprocessor
 """
-import sys, subprocess, simplethread
+import sys, subprocess, simplethread, cStringIO as StringIO
 
 TERMINATOR = object()
 
@@ -16,6 +16,7 @@ class Courier:
         self.cwd = cwd
         
     def run(self, *args, **kwargs):
+        self.lastoutput = StringIO.StringIO()
         self.note(' '.join(args))
         p = subprocess.Popen(args, cwd=self.cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         simplethread.spawn(lambda: self._gobble(p.stderr))
@@ -40,6 +41,7 @@ class Courier:
         
         
     def _store(self, x):
+        self.lastoutput.write(x)
         sys.stdout.write(x)
     
     def note(self, line):
