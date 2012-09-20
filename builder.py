@@ -72,8 +72,8 @@ def do_build(commit_hash, sh, buildserver):
         else:
             return errcode
     
+    sh.run('git', 'remote', 'add', buildserver.short_name, buildserver.git_url)
     errcode = ( # 0 is success, so we use `or`
-      sh.run('git', 'remote', 'add', buildserver.short_name, buildserver.git_url) or
       sh.run('git', 'pull', 'origin', 'master') or
       sh.run('git', 'checkout', commit_hash) or
       sensiblepush()
