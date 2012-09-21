@@ -65,7 +65,11 @@ def do_build(commit_hash, sh, buildserver):
     sh.cd(REPO_STORAGE)
     
     def sensiblepush(count=10):
+        sh.note('# Sensibly pushing...')
         errcode = sh.run('git', 'push', buildserver.short_name, commit_hash + ':master')
+        if errcode and count:
+            sh.note('# Examining whether we can retry.')
+        
         if errcode and count and 'error fetching custom buildpack' in sh.lastoutput.getvalue():
             sh.note('# Error fetching custom buildpack, retrying.')
             return sensiblepush(count=count-1)
