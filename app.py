@@ -26,7 +26,7 @@ def unconsole_filter(s):
 
 @app.route("/hook", methods=["POST"])
 def github_hook():
-    d = json.loads(request.form.keys()[0])
+    d = json.loads(request.form['payload'])
     if d['ref'] != 'refs/heads/master': return "skipping\n"
     
     for commit in d['commits']:
