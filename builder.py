@@ -54,6 +54,7 @@ def start_build(db, job):
     db.update('builds', where="id=$build_id", done=True, success=result, vars=locals())
     db.update('jobs', where="id=$job.id", done=True, success=result, vars=locals())
     db.update('buildservers', where='id=$buildserver.id', building=None, vars=locals())
+    db.insert('announcements', content="Deploy %s!" % {True: "succeeded", False: "failed"}[result])
 
 def do_build(commit_hash, sh, buildserver):
     if not os.path.exists(REPO_STORAGE):

@@ -5,7 +5,7 @@ CREATE TABLE jobs (
   commit_hash text,
   builder text,
   done boolean default 'f',
-  created_at timestamp default now,
+  created_at timestamp default now(),
   message text,
   author text,
   success boolean
@@ -25,4 +25,10 @@ CREATE TABLE buildservers (
   git_url text,
   short_name text,
   building int references builds
+);
+
+CREATE TABLE announcements (
+  id serial primary key,
+  content text,
+  created_at timestamp default now()
 );

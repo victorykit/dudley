@@ -1,5 +1,5 @@
-import os, urllib, json
-from flask import Flask, request, make_response, render_template
+import os, urllib, json, datetime
+from flask import Flask, request, make_response, render_template, url_for
 import web, pusher, jinja2
 import simplethread, builder
 
@@ -26,61 +26,47 @@ def unconsole_filter(s):
 
 @app.route("/hook", methods=["POST"])
 def github_hook():
-    #d = json.loads(request.data)
-    d = request.json
+    d = json.loads(request.form.keys()[0])
     if d['ref'] != 'refs/heads/master': return "skipping\n"
-    job_id = db.insert('jobs', commit_hash=d['after'])
-    builder.buildqueue.put(job_id)
-    return "queued\n"
+    
+    for commit in d['commits']:
+        announce("%s: %s\n%s" % (commit['author']['name'], commit['message'], commit['url'][:-40+7]))
+    
+    return "announced\n"
 
 @app.route('/semaphore_hook', methods=["POST"])
 def semaphore_hook():
     d = json.loads(request.form.keys()[0])
-    if d['branch_name'] != 'master' or d['result'] != 'passed': return "skipping\n"
+    if d['branch_name'] != 'master': return "skipping\n"
+    
+    if d['result'] != 'passed':
+        announce("%s broke the build!\n%s" % (d['commit']['author_name'], d['build_url']))
+        return "announced\n"
+    
     job_id = db.insert('jobs', commit_hash=d['commit']['id'], message=d['commit']['message'], author=d['commit']['author_name'])
     builder.buildqueue.put(job_id)
+    
+    announce("Deploying: %s\n%s" % (d['commit']['message'], url_for('show_job', job_id=job_id, _external=True)))
     return "queued\n"
 
-
-from datetime import datetime
-@app.template_filter('timesince')
-def friendly_time(dt, past_="ago", 
-    future_="from now", 
-    default="just now"):
-    """
-    Returns string representing "time since"
-    or "time until" e.g.
-    3 days ago, 5 hours from now etc.
-    """
-    if dt is None or isinstance(dt, jinja2.runtime.Undefined): return None
+@app.route('/announcements.json')
+def announcements():
+    last_check = request.args.get('since')
     
-    now = datetime.utcnow()
-    if now > dt:
-        diff = now - dt
-        dt_is_past = True
+    if last_check:
+        print last_check
+        r = db.select('announcements', where="created_at > $last_check", vars=locals())
     else:
-        diff = dt - now
-        dt_is_past = False
+        r = db.select('announcements', limit=10)
+    
+    dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime.datetime) else None
+    return json.dumps(r.list(), default=dthandler)
 
-    periods = (
-        (diff.days / 365, "year", "years"),
-        (diff.days / 30, "month", "months"),
-        (diff.days / 7, "week", "weeks"),
-        (diff.days, "day", "days"),
-        (diff.seconds / 3600, "hour", "hours"),
-        (diff.seconds / 60, "minute", "minutes"),
-        (diff.seconds, "second", "seconds"),
-    )
+def announce(announcement):
+    return db.insert('announcements', content=announcement)
 
-    for period, singular, plural in periods:
-
-        if period:
-            return "%d %s %s" % (period, 
-                singular if period == 1 else plural, 
-                past_ if dt_is_past else future_)
-
-    return default
-
+import utils
+app.template_filter('timesince')(utils.friendly_time)
 
 if __name__ == "__main__":
     simplethread.spawn(lambda: builder.watchdb(db))
