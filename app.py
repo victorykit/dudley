@@ -55,9 +55,9 @@ def announcements():
     
     if last_check:
         print last_check
-        r = db.select('announcements', where="created_at > $last_check", vars=locals())
+        r = db.select('announcements', where="created_at > $last_check", order='created_at asc', vars=locals())
     else:
-        r = db.select('announcements', limit=10)
+        r = db.select('announcements', order='created_at asc', limit=10)
     
     dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime.datetime) else None
     return json.dumps(r.list(), default=dthandler)
