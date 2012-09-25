@@ -1,0 +1,107 @@
+body {
+  background: #ddd;
+  font-family: helvetica neue, helvetica, arial, tahoma, sans-serif;
+  margin: 0;
+}
+
+h1 {
+  color: white;
+  margin: 0 0 5px 5px;
+  font-size: 25px;
+  letter-spacing: 1px;
+}
+h3 {
+  font-size: 18px;
+}
+
+.content {
+  max-width: 42em;
+  color: white;
+  margin: 10px auto;
+  padding: 0.3em .3em 0;
+  background: #444;
+}
+.box {
+  padding: 1em;
+  margin: 0;
+  display: block;
+  width: 40em;
+  clear: both;
+  border-bottom: 1px solid #444;
+  color: black;
+  text-decoration: none;
+  min-height: 3em;
+}
+.failed_build, .successful_build {
+  background: #fff;
+}
+a.failed_build:hover, a.successful_build:hover {
+  background: #efefef;
+}
+.build_status {
+  color: white;
+  float: left;
+  margin: 4px 1em .5em 0;
+  padding: 0.2em 0.5em;
+  width: 3.5em;
+  text-align: center;
+}
+.failed_build .build_status {
+  background: #822;
+}
+.successful_build .build_status {
+  background: #282;
+}
+.commit_hash {
+  float: left;
+  max-width: 28.5em;
+}
+.author_time {
+  float: right;
+}
+.time_since {
+  margin: 0 0 .2em 0;
+  max-width: 6em;
+}
+.author {
+  color: #888;
+  font-size: 90%;
+  max-width: 6em;
+}
+.commit_message {
+  margin-bottom: 13px;
+  font-weight: bold;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+.hash {
+  color: #aaa;
+  background: #eee;
+  padding: 4px 5px 3px;
+  border-radius: 3px;
+}
+a.box:hover .hash {
+  background: #ddd;
+  color: #999;
+}
+.footer {
+  text-align: center;
+  padding: 5px;
+}
+.footer.log_page {
+  padding: 9px 5px 10px;
+  border-top: 1px solid #ddd;
+}
+.footer a, .footer a:visited  {
+  text-decoration: none;
+  font-size: 80%;
+  color: white;
+}
+.footer a:hover {
+  text-decoration: underline;
+}
+.log {
+  width: 100%;
+  white-space: pre-wrap;
+  padding-bottom: 15px;
+}

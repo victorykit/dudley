@@ -1,24 +1,27 @@
-<style type="text/css">
-    .box { padding: 1em; margin: .5em; display: block; width: 40em; }
-    
-    
-    .box { color: black; text-decoration: none; }
-    a:link.box .linkylink { color: blue; text-decoration: underline; }
-    a:visited.box .linkylink { color: purple; text-decoration: underline; }
-    
-    code.hash { color: #aaa; }
-</style>
-<h1>Deploys</h1>
+<link rel="stylesheet" type="text/css" href="/static/style.css">
+<div class="content">
+  <h1>Deploys</h1>
 
-{%if ci_link%} <p><a href="{{ci_link}}">View build status...</a></p> {% endif %}
+  {%if ci_link%} <p><a href="{{ci_link}}">View build status...</a></p> {% endif %}
 
-{% for job in jobs %}
-{% set color = {True: '#dfd', False: '#fdd', None: '#ddd'}[job.success] %}
-<a href="/jobs/{{job.id}}" class="box" style="background-color: {{color}};">
-    <div style="float: right">{{job.author or ''}}<br />{{job.created_at|timesince}}</div>
-    <b>{{job.message or ''}}</b><br />
-    <code class="hash">{{job.commit_hash}}</code>
-</a>
-{% endfor %}
+  {% for job in jobs %}
+  {% set class = {True: 'successful_build', False: 'failed_build', None: '#ddd'}[job.success] %}
+  {% set description = {True: 'PASS', False: 'FAIL', None: '#ddd'}[job.success] %}
+    <a href="/jobs/{{job.id}}" class="box {{class}}">
+      <div class="build_status">{{description}}</div>
+      <div class="commit_hash">
+        <div class="commit_message">{{job.message or ''}}</div>
+        <code class="hash">{{job.commit_hash}}</code>
+      </div>
+      <div class="author_time">
+        <div class="time_since">{{job.created_at|timesince}}</div>
+        <div class="author">{{job.author or ''}}</div>
+      </div>
+      <div style="clear: both;"></div>
+    </a>
+  {% endfor %}
 
-<p><a href="https://github.com/victorykit/dudley">Powered by Dudley.</a></p>
+  <div class="footer">
+    <a href="https://github.com/victorykit/dudley">Powered by Dudley.</a>
+  </div>
+</div>

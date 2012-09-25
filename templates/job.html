@@ -1,21 +1,44 @@
-<h1>job {{job.commit_hash}}</h1>
+<link rel="stylesheet" type="text/css" href="/static/style.css">
 
-{% for build in builds %}
+<div class="content">
+  {% set class = {True: 'successful_build', False: 'failed_build', None: '#ddd'}[job.success] %}
+  {% set description = {True: 'PASS', False: 'FAIL', None: '#ddd'}[job.success] %}
+  <div href="/jobs/{{job.id}}" class="box {{class}}">
+    <div class="build_status">{{description}}</div>
+    <div class="commit_hash">
+      <div class="commit_message">{{job.message or ''}}</div>
+      <code class="hash">{{job.commit_hash}}</code>
+    </div>
+    <div class="author_time">
+      <div class="time_since">{{job.created_at|timesince}}</div>
+      <div class="author">{{job.author or ''}}</div>
+    </div>
+    <div style="clear: both;"></div>
+  </div>
 
-<h2>build {{build.id}}</h2>
+  {% for build in builds %}
 
-<pre id="build_{{build.id}}">{{build.log|unconsole}}</pre>
+    <h2>build {{build.id}}</h2>
 
-{% endfor %}
+    <pre id="build_{{build.id}}" class="log">{{build.log|unconsole}}</pre>
 
+  {% endfor %}
+
+  <div class="footer log_page">
+    <a href="https://github.com/victorykit/dudley">Powered by Dudley.</a>
+  </div>
+</div>
+
+</div>
 <script src="//d3dy5gmtp8yhk7.cloudfront.net/1.12/pusher.min.js"></script>
 <script type="text/javascript">
-var pusher = new Pusher('{{pusher_key}}'); // uses your API KEY
-function updateFromChannel(data) {
-  document.getElementById('build_' + data.build_id).innerHTML += data.text.replace('\033[1m', '<b>').replace('\033[0m', '</b>');
-  window.scrollTo(0, document.body.scrollHeight);
-}
+  var pusher = new Pusher('{{pusher_key}}'); // uses your API KEY
+  function updateFromChannel(data) {
+    document.getElementById('build_' + data.build_id).innerHTML += data.text.replace('\033[1m', '<b>').replace('\033[0m', '</b>');
+    window.scrollTo(0, document.body.scrollHeight);
+  }
 {% for build in builds %}
 pusher.subscribe('build_{{build.id}}').bind('update', updateFromChannel);
 {% endfor %}
 </script>
+
