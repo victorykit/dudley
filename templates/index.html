@@ -5,7 +5,7 @@
   {%if ci_link%} <p><a href="{{ci_link}}" class="ci_link">View build status...</a></p> {% endif %}
 
   {% for job in jobs %}
-  {% set class = {True: 'successful_build', False: 'failed_build', None: '#ddd'}[job.success] %}
+  {% set class = {True: 'successful_build', False: 'failed_build', None: 'building'}[job.success] %}
   {% set description = {True: 'PASS', False: 'FAIL', None: '#ddd'}[job.success] %}
     <a href="/jobs/{{job.id}}" class="box {{class}}">
       <div class="build_status">{{description}}</div>
