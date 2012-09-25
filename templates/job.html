@@ -18,7 +18,7 @@
 
   {% for build in builds %}
 
-    <h2>build {{build.id}}</h2>
+    <h2 class="build_id">build {{build.id}}</h2>
 
     <pre id="build_{{build.id}}" class="log">{{build.log|unconsole}}</pre>
 
@@ -41,4 +41,3 @@
 pusher.subscribe('build_{{build.id}}').bind('update', updateFromChannel);
 {% endfor %}
 </script>
-

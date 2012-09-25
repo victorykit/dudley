@@ -3,7 +3,6 @@ body {
   font-family: helvetica neue, helvetica, arial, tahoma, sans-serif;
   margin: 0;
 }
-
 h1 {
   color: white;
   margin: 0 0 5px 5px;
@@ -13,13 +12,20 @@ h1 {
 h3 {
   font-size: 18px;
 }
-
 .content {
   max-width: 42em;
   color: white;
   margin: 10px auto;
   padding: 0.3em .3em 0;
   background: #444;
+}
+.ci_link, .ci_link:visited {
+  color: white;
+  margin-left: 5px;
+  text-decoration: none;
+}
+.ci_link:hover {
+  text-decoration: underline;
 }
 .box {
   padding: 1em;
@@ -39,6 +45,8 @@ a.failed_build:hover, a.successful_build:hover {
   background: #efefef;
 }
 .build_status {
+  letter-spacing: 1px;
+  font-weight: 500;
   color: white;
   float: left;
   margin: 4px 1em .5em 0;
@@ -54,14 +62,14 @@ a.failed_build:hover, a.successful_build:hover {
 }
 .commit_hash {
   float: left;
-  max-width: 28.5em;
+  max-width: 27em;
 }
 .author_time {
   float: right;
 }
 .time_since {
   margin: 0 0 .2em 0;
-  max-width: 6em;
+  max-width: 7em;
 }
 .author {
   color: #888;
@@ -100,8 +108,14 @@ a.box:hover .hash {
 .footer a:hover {
   text-decoration: underline;
 }
+h2.build_id {
+  font-size: 25px;
+  color: #bbb;
+  float: right;
+  margin: 6px;
+}
 .log {
   width: 100%;
   white-space: pre-wrap;
-  padding-bottom: 15px;
+  padding: 0 5px 15px;
 }

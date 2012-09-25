@@ -2,7 +2,7 @@
 <div class="content">
   <h1>Deploys</h1>
 
-  {%if ci_link%} <p><a href="{{ci_link}}">View build status...</a></p> {% endif %}
+  {%if ci_link%} <p><a href="{{ci_link}}" class="ci_link">View build status...</a></p> {% endif %}
 
   {% for job in jobs %}
   {% set class = {True: 'successful_build', False: 'failed_build', None: '#ddd'}[job.success] %}
