@@ -38,10 +38,10 @@ h3 {
   text-decoration: none;
   min-height: 3em;
 }
-.failed_build, .successful_build {
+.failed_build, .successful_build, .building {
   background: #fff;
 }
-a.failed_build:hover, a.successful_build:hover {
+a.failed_build:hover, a.successful_build:hover, .building:hover {
   background: #efefef;
 }
 .build_status {
@@ -51,8 +51,11 @@ a.failed_build:hover, a.successful_build:hover {
   float: left;
   margin: 4px 1em .5em 0;
   padding: 0.2em 0.5em;
-  width: 3.5em;
+  width: 4em;
   text-align: center;
+}
+.building .build_status {
+  background: #ccc;
 }
 .failed_build .build_status {
   background: #822;
