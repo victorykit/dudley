@@ -41,13 +41,14 @@ class Courier:
         
         
     def _store(self, x):
-        self.lastoutput.write(x)
+        # gets overwritten by caller sometimes
         sys.stdout.write(x)
     
     def note(self, line):
         self._store('\033[1m$ ' + line + '\033[0m\n')
     
     def output(self, data):
+        self.lastoutput.write(data)
         self._store(data)
     
     def _gobble(self, fileobj):
