@@ -46,7 +46,7 @@ def semaphore_hook():
     job_id = db.insert('jobs', commit_hash=d['commit']['id'], message=d['commit']['message'], author=d['commit']['author_name'])
     builder.buildqueue.put(job_id)
     
-    announce("Deploying: %s\n%s" % (d['commit']['message'], url_for('show_job', job_id=job_id, _external=True)))
+    announce("Deploying %s: %s" % (d['commit']['id'][:7], url_for('show_job', job_id=job_id, _external=True)))
     return "queued\n"
 
 @app.route('/announcements.json')
