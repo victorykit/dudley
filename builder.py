@@ -71,6 +71,8 @@ def do_build(commit_hash, sh, buildserver):
             return sensiblepush(count=count-1)
         elif errcode and count and 'Illegal instruction' in sh.lastoutput.getvalue():
             return sensiblepush(count=count-1)
+        elif errcode and count and 'Utils::TimeoutError' in sh.lastoutput.getvalue():
+            return sensiblepush(count=count-1)
         else:
             return errcode
     
