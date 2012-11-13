@@ -62,6 +62,17 @@ def announcements():
     dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime.datetime) else None
     return json.dumps(r.list(), default=dthandler)
 
+@app.route('/airbrake_hook', methods=["POST"])
+def airbrake_hook():
+    try:
+        d = json.loads(request.form.keys()[0])
+        error_message = d['error_message']
+    except Exception, e:
+        announce("Failed to handle Airbrake webhook: %s\n%s" % (e, request.form))
+    else:
+        announce("Via Airbrake: %s" % error_message)
+    return "announced\n"
+
 def announce(announcement):
     return db.insert('announcements', content=announcement)
 
