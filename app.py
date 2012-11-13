@@ -66,7 +66,7 @@ def announcements():
 def airbrake_hook():
     try:
         d = json.loads(request.form.keys()[0])
-        error_message = d['error_message']
+        error_message = d['error']['error_message']
     except Exception, e:
         announce("Failed to handle Airbrake webhook: %s\n%s" % (e, request.form))
     else:
