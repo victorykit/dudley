@@ -65,9 +65,22 @@ def announcements():
 @app.route('/airbrake_hook', methods=["POST"])
 def airbrake_hook():
     try:
-        d = json.loads(request.form.keys()[0])
+        #request.data is empty for some reason, and unescaped equals signs are causing the posted data to be
+        #split across multiple key/value pairs, so i'm joining them all together until we find a better way
+        items = []
+        for key in request.form.keys():
+            items.append(key)
+            values = request.form.getlist(key)
+            if len(values) > 0:
+                items.append("=")
+                items.extend(values)
+        raw = "".join(items)
+        d = json.loads(raw)
         error_message = d['error']['error_message']
     except Exception, e:
+        print("error parsing airbrake webhook: %s" % e)
+        print("request.form: %s \n" % request.form)
+        print("joined form data: %s \n" % raw)
         announce("Failed to handle Airbrake webhook: %s\n%s" % (e, request.form))
     else:
         announce("Via Airbrake: %s" % error_message)
