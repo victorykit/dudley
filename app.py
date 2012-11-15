@@ -80,7 +80,7 @@ def airbrake_hook():
     except Exception, e:
         print("error parsing airbrake webhook: %s" % e)
         print("request.form: %s \n" % request.form)
-        print("joined form data: %s \n" % raw)
+        print("joined form data: %s \n" % repr(raw))
         announce("Failed to handle Airbrake webhook: %s\n%s" % (e, request.form))
     else:
         announce("Via Airbrake: %s" % error_message)
