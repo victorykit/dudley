@@ -70,7 +70,7 @@ def airbrake_hook():
         items = []
         for key in request.form.keys():
             items.append(key)
-            values = request.form.getlist(key)
+            values = filter(None, request.form.getlist(key))
             if len(values) > 0:
                 items.append("=")
                 items.extend(values)
